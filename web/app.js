@@ -42,11 +42,44 @@ async function initData() {
 }
 
 function initUI() {
+  initTheme();
   renderSidebar(appData.modules);
   setupLanguageSwitcher();
   setupSearch();
   setupPdfModal();
   window.addEventListener('hashchange', handleRouting);
+}
+
+function initTheme() {
+  const savedTheme = localStorage.getItem('systemdesign_theme') || 'light';
+  applyTheme(savedTheme);
+
+  const themeToggleBtn = document.getElementById('themeToggleBtn');
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', () => {
+      const isDark = document.body.classList.contains('theme-dark');
+      const newTheme = isDark ? 'light' : 'dark';
+      applyTheme(newTheme);
+      localStorage.setItem('systemdesign_theme', newTheme);
+    });
+  }
+}
+
+function applyTheme(theme) {
+  const themeToggleBtn = document.getElementById('themeToggleBtn');
+  if (theme === 'dark') {
+    document.body.classList.add('theme-dark');
+    if (themeToggleBtn) {
+      themeToggleBtn.querySelector('.theme-icon').textContent = '☀️';
+      themeToggleBtn.querySelector('.theme-text').textContent = 'Açık';
+    }
+  } else {
+    document.body.classList.remove('theme-dark');
+    if (themeToggleBtn) {
+      themeToggleBtn.querySelector('.theme-icon').textContent = '🌙';
+      themeToggleBtn.querySelector('.theme-text').textContent = 'Koyu';
+    }
+  }
 }
 
 // Router based on hash (#lesson-12)
